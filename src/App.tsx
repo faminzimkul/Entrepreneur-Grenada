@@ -43,7 +43,11 @@ function ImageArt({article, variant=0}:{article:Article;variant?:number}) {
   </div>;
 }
 function App() {
-  const [active, setActive] = useState<Article|null>(() => {\n    const hashMatch = window.location.hash.match(/^#\\/article\\/([^/?#]+)/);\n    const slug = hashMatch?.[1] || window.location.pathname.match(/^\\/article\\/([^/?#]+)/)?.[1];\n    return ARTICLES.find(article => article.id === slug) ?? null;\n  });
+  const [active, setActive] = useState<Article|null>(() => {
+    const legacy = window.location.hash.match(/^#\/article\/([^/?#]+)/);
+    const slug = legacy?.[1] || window.location.pathname.match(/^\/article\/([^/?#]+)/)?.[1];
+    return ARTICLES.find(article => article.id === slug) ?? null;
+  });
   const [category, setCategory] = useState<Nav>('Latest');
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -54,8 +58,19 @@ function App() {
   const featured = ARTICLES.find(a=>a.placement==='featured') || ARTICLES[0];
   const latest = ARTICLES.filter(a=>a.placement==='latest');
   const side = ARTICLES.filter(a=>a.placement==='side');
-  const openArticle = (a:Article)=>{setActive(a);window.history.replaceState(null,'',`#/article/${a.id}`);window.scrollTo({top:0,behavior:'smooth'});};
-  const closeArticle = ()=>{setActive(null);window.history.replaceState(null,'',window.location.pathname);};
+  useEffect(() => {
+    const legacy = window.location.hash.match(/^#\/article\/([^/?#]+)/);
+    if (legacy) window.history.replaceState(null, '', `/article/${legacy[1]}`);
+    const syncRoute = () => {
+      const slug = window.location.pathname.match(/^\/article\/([^/?#]+)/)?.[1];
+      setActive(ARTICLES.find(article => article.id === slug) ?? null);
+    };
+    syncRoute();
+    window.addEventListener('popstate', syncRoute);
+    return () => window.removeEventListener('popstate', syncRoute);
+  }, []);
+  const openArticle = (a:Article)=>{setActive(a);window.history.pushState(null,'',`/article/${a.id}`);window.scrollTo({top:0,behavior:'smooth'});};
+  const closeArticle = ()=>{setActive(null);window.history.pushState(null,'','/');window.scrollTo({top:0,behavior:'smooth'});};
   const toggleSave = (id:string)=>setSaved(s=>s.includes(id)?s.filter(x=>x!==id):[...s,id]);
   const share = async()=>{try{await navigator.clipboard.writeText(window.location.href);setCopied(true);setTimeout(()=>setCopied(false),1800);}catch{}};
   const articleCard=(a:Article,i:number)=><button key={a.id} onClick={()=>openArticle(a)} className="text-left group w-full">
