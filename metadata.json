@@ -1,0 +1,6 @@
+{
+  "name": "Remix Remix Entrepreneur Rebuild",
+  "description": "A premium digital hub providing news, insights, and strategic guidance for modern entrepreneurs and business professionals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
