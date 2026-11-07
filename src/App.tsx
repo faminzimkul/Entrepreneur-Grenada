@@ -43,7 +43,7 @@ function ImageArt({article, variant=0}:{article:Article;variant?:number}) {
   </div>;
 }
 function App() {
-  const [active, setActive] = useState<Article|null>(null);
+  const [active, setActive] = useState<Article|null>(() => {\n    const hashMatch = window.location.hash.match(/^#\\/article\\/([^/?#]+)/);\n    const slug = hashMatch?.[1] || window.location.pathname.match(/^\\/article\\/([^/?#]+)/)?.[1];\n    return ARTICLES.find(article => article.id === slug) ?? null;\n  });
   const [category, setCategory] = useState<Nav>('Latest');
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
