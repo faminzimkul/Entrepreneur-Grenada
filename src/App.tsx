@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ARTICLES, Article } from './data/articles';
 import { ArrowLeft, ArrowRight, Bookmark, Check, ChevronRight, Clock3, Mail, Menu, Search, Share2, X } from 'lucide-react';
 
