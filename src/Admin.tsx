@@ -1,5 +1,7 @@
-import { FormEvent, useEffect, useState } from 'react';
-import { api, apiConfigured, ArticleInput, getToken, setToken } from './lib/api';
+import { useEffect, useState } from 'react';
+import type { FormEvent } from 'react';
+import { api, apiConfigured, getToken, setToken } from './lib/api';
+import type { ArticleInput } from './lib/api';
 import { ArrowLeft, FilePlus2, LayoutDashboard, LogOut, Newspaper, Pencil, Plus, RefreshCw, Search, Trash2, X } from 'lucide-react';
 
 type Editor = {
