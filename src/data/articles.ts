@@ -13,6 +13,8 @@ export interface Article {
   pullQuote: string;
   keyTakeaways: string[];
   body: string[];
+  coverImage?: string;
+  status?: 'draft' | 'published';
 }
 
 // Demo content removed. Articles will be added through the admin panel.
