@@ -88,7 +88,7 @@ function App() {
       {searchOpen&&<div className="max-w-[1440px] mx-auto px-5 sm:px-8 pb-4"><input autoFocus value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search stories, topics, authors..." className="w-full border-b border-slate-300 py-3 outline-none text-sm"/></div>}
     </header>
     <div className="bg-[#1d40b0] text-white text-center py-3.5 text-[13px] sm:text-[15px] font-bold tracking-[-.01em]"><a href="#" className="underline underline-offset-2 hover:opacity-85">Discover the stories shaping Grenada’s business community</a></div>
-    {active ? <main className="max-w-[850px] mx-auto px-5 py-8 sm:py-14">
+    {active ? <main className="w-full max-w-[1358px] mx-auto px-5 sm:px-8 lg:px-0 py-8 sm:py-10"><div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.4fr)_minmax(280px,0.95fr)] gap-10 xl:gap-[110px] items-start"><article className="min-w-0">
       <button onClick={closeArticle} className="flex items-center gap-2 text-xs font-bold text-[#1d40b0] mb-8"><ArrowLeft size={16}/> BACK TO STORIES</button>
       <p className="text-[11px] tracking-[.14em] font-extrabold text-[#1d40b0]">{active.category}</p>
       <h1 className="font-serif text-[36px] sm:text-[54px] leading-[1.06] font-bold tracking-[-1.5px] mt-4">{active.title}</h1>
