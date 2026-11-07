@@ -124,13 +124,13 @@ function App() {
         <div className="border-t border-dotted border-white/60"/>
         <section className="grid grid-cols-2 md:grid-cols-3 gap-x-7 gap-y-9 py-10 sm:py-12">
           <div><h3 className="font-bold text-[16px] mb-5">Explore</h3><div className="grid gap-4 text-[14px] font-semibold text-slate-200">{['Latest','Build Your Business','Start a Side Hustle','Business News'].map((item,i)=><button key={item} onClick={()=>{setCategory(i===0?'Latest':item as Nav);setActive(null);window.scrollTo({top:0,behavior:'smooth'});}} className="text-left hover:text-white hover:underline underline-offset-4">{item}</button>)}</div></div>
-          <div><h3 className="font-bold text-[16px] mb-5">For Entrepreneurs</h3><div className="grid gap-4 text-[14px] font-semibold text-slate-200"><a href="mailto:hello@entrepreneurgrenada.com" className="hover:text-white hover:underline underline-offset-4">Share Your Story</a><a href="mailto:hello@entrepreneurgrenada.com?subject=Advertising%20and%20Partnerships" className="hover:text-white hover:underline underline-offset-4">Advertise & Partner</a><a href="mailto:hello@entrepreneurgrenada.com?subject=Editorial%20Enquiry" className="hover:text-white hover:underline underline-offset-4">Contact the Editorial Team</a></div></div>
+          <div><h3 className="font-bold text-[16px] mb-5">For Entrepreneurs</h3><div className="grid gap-4 text-[14px] font-semibold text-slate-200"><span>Share Your Story</span><span>Advertise & Partner</span><span>Contact the Editorial Team</span></div></div>
           <div className="col-span-2 md:col-span-1"><h3 className="font-bold text-[16px] mb-5">Entrepreneur Grenada</h3><p className="text-[14px] leading-6 text-slate-300 max-w-[280px]">Independent stories, ideas and perspectives for the people building businesses across Grenada and the Caribbean.</p></div>
         </section>
         <div className="border-t border-dotted border-white/60"/>
         <section className="flex flex-col md:flex-row justify-between gap-5 py-7 text-[12px] text-slate-300">
           <p>© 2026 Entrepreneur Grenada. All rights reserved.</p>
-          <div className="flex flex-wrap gap-x-6 gap-y-2"><a href="mailto:hello@entrepreneurgrenada.com?subject=Privacy%20Enquiry" className="hover:text-white">Privacy</a><a href="mailto:hello@entrepreneurgrenada.com?subject=Terms%20Enquiry" className="hover:text-white">Terms</a><a href="mailto:hello@entrepreneurgrenada.com" className="hover:text-white">Contact</a></div>
+          <div className="flex flex-wrap gap-x-6 gap-y-2"><span>Privacy</span><span>Terms</span><span>Contact</span></div>
         </section>
         <p className="text-center text-[12px] leading-6 text-slate-400 pt-1">Rooted in Grenada. Connected to the Caribbean. Focused on what’s next.</p>
       </div>
