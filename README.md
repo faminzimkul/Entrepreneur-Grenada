@@ -2,13 +2,17 @@
 <img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
 </div>
 
-# Run and deploy your AI Studio app
+# Entrepreneur Grenada
 
-This contains everything you need to run your app locally.
+Editorial website and content management dashboard.
 
-View your app in AI Studio: https://ai.studio/apps/19004a73-d5af-420e-aa53-cfb4e17e276f
+## Admin dashboard
 
-## Run Locally
+Open `/admin` on the deployed website to access the admin interface. The dashboard requires the PHP API to be deployed and configured; no demo credentials or local database are included.
+
+Set `VITE_API_BASE_URL` in the Vercel project environment variables to the HTTPS base URL of the PHP API. See [API_SETUP.md](./API_SETUP.md) for the endpoint contract and deployment notes.
+
+## Run locally
 
 **Prerequisites:** Node.js
 
