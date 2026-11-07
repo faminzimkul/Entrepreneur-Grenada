@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ARTICLES, Article } from './data/articles';
+import { api } from './lib/api';
 import { ArrowLeft, ArrowRight, Bookmark, Check, ChevronRight, Clock3, Mail, Menu, Search, Share2, X } from 'lucide-react';
 
 const nav = ['Build Your Business', 'Start a Side Hustle', 'Franchises', 'Business News'] as const;
@@ -13,6 +14,7 @@ function Brand({ inverse = false }: { inverse?: boolean }) {
 }
 
 function ImageArt({article, variant=0}:{article:Article;variant?:number}) {
+  if (article.coverImage) return <div className="relative overflow-hidden aspect-[16/10] rounded-lg border border-slate-200/70 bg-slate-100"><img src={article.coverImage} alt={article.title} loading="lazy" className="h-full w-full object-cover"/></div>;
   const backgrounds = ['#f4e5c9','#e6ece8','#e7e9f1'];
   return <div className="relative overflow-hidden aspect-[16/10] rounded-lg border border-slate-200/70" style={{backgroundColor:backgrounds[variant%3]}}>
     <svg viewBox="0 0 640 400" className="w-full h-full" role="img" aria-label={article.title}>
@@ -43,10 +45,11 @@ function ImageArt({article, variant=0}:{article:Article;variant?:number}) {
   </div>;
 }
 function App() {
+  const [articles, setArticles] = useState<Article[]>(ARTICLES);
   const [active, setActive] = useState<Article|null>(() => {
     const legacy = window.location.hash.match(/^#\/article\/([^/?#]+)/);
     const slug = legacy?.[1] || window.location.pathname.match(/^\/article\/([^/?#]+)/)?.[1];
-    return ARTICLES.find(article => article.id === slug) ?? null;
+    return articles.find(article => article.id === slug) ?? null;
   });
   const [category, setCategory] = useState<Nav>('Latest');
   const [searchOpen, setSearchOpen] = useState(false);
@@ -54,21 +57,28 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [saved, setSaved] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
-  const visible = useMemo(()=>ARTICLES.filter(a=>(category==='Latest'||a.navGroup===category)&&(!query||[a.title,a.subtitle,a.category,a.author].join(' ').toLowerCase().includes(query.toLowerCase()))),[category,query]);
-  const featured = ARTICLES.find(a=>a.placement==='featured') || ARTICLES[0];
-  const latest = ARTICLES.filter(a=>a.placement==='latest');
-  const side = ARTICLES.filter(a=>a.placement==='side');
+  const visible = useMemo(()=>articles.filter(a=>(category==='Latest'||a.navGroup===category)&&(!query||[a.title,a.subtitle,a.category,a.author].join(' ').toLowerCase().includes(query.toLowerCase()))),[articles,category,query]);
+  const featured = articles.find(a=>a.placement==='featured') || ARTICLES[0];
+  const latest = articles.filter(a=>a.placement==='latest');
+  const side = articles.filter(a=>a.placement==='side');
+  useEffect(() => {
+    api.publicArticles().then(({articles: remote}) => {
+      setArticles(remote);
+      const slug = window.location.pathname.match(/^\/article\/([^/?#]+)/)?.[1];
+      if (slug) setActive(remote.find(article => article.id === slug) ?? null);
+    }).catch(() => {});
+  }, []);
   useEffect(() => {
     const legacy = window.location.hash.match(/^#\/article\/([^/?#]+)/);
     if (legacy) window.history.replaceState(null, '', `/article/${legacy[1]}`);
     const syncRoute = () => {
       const slug = window.location.pathname.match(/^\/article\/([^/?#]+)/)?.[1];
-      setActive(ARTICLES.find(article => article.id === slug) ?? null);
+      setActive(articles.find(article => article.id === slug) ?? null);
     };
     syncRoute();
     window.addEventListener('popstate', syncRoute);
     return () => window.removeEventListener('popstate', syncRoute);
-  }, []);
+  }, [articles]);
   const openArticle = (a:Article)=>{setActive(a);window.history.pushState(null,'',`/article/${a.id}`);window.scrollTo({top:0,behavior:'smooth'});};
   const closeArticle = ()=>{setActive(null);window.history.pushState(null,'','/');window.scrollTo({top:0,behavior:'smooth'});};
   const toggleSave = (id:string)=>setSaved(s=>s.includes(id)?s.filter(x=>x!==id):[...s,id]);
@@ -117,7 +127,7 @@ function App() {
       <div className="mt-12 pt-6 border-t border-slate-200 flex justify-between items-center"><span className="text-xs text-slate-500">Continue exploring</span><button onClick={closeArticle} className="flex items-center gap-2 text-sm font-bold text-[#1d40b0]">More stories <ArrowRight size={16}/></button></div>
       </article></div>
     </main> : <main className="w-full max-w-[1485px] mx-auto px-5 sm:px-8 lg:px-10 pt-10 sm:pt-[60px]">
-      {category==='Latest'&&!query&&ARTICLES.length>0&&<section className="grid lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.75fr)_minmax(0,0.95fr)] gap-6 xl:gap-[30px] pb-10 items-start">
+      {category==='Latest'&&!query&&articles.length>0&&<section className="grid lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.75fr)_minmax(0,0.95fr)] gap-6 xl:gap-[30px] pb-10 items-start">
         <aside className="order-2 lg:order-1 pt-0.5"><div className="flex justify-between items-center mb-2"><h2 className="font-serif text-[34px] font-bold tracking-tight">Latest</h2><button onClick={()=>setCategory("Latest")} className="flex items-center gap-2 text-[13px] font-bold hover:text-[#1d40b0]">See All <span className="w-6 h-6 rounded-full bg-[#1d40b0] text-white flex items-center justify-center"><ArrowRight size={14}/></span></button></div>{latest.map((a,i)=><button key={a.id} onClick={()=>openArticle(a)} className="block text-left w-full py-[22px] border-b border-[#dce1e9] group"><span className="block text-[14px] font-bold tracking-[.035em] text-[#1d40b0] mb-2">{a.category}</span><span className="font-serif font-bold text-[18px] leading-[1.18] tracking-[-.25px] group-hover:text-[#1d40b0]">{a.title}</span></button>)}</aside>
         <article className="order-1 lg:order-2 cursor-pointer group bg-[#f7f8fa] border border-slate-100 rounded-[14px] px-5 sm:px-[30px] pt-[27px] pb-7 shadow-[0_10px_35px_rgba(15,23,42,0.055)]" onClick={()=>openArticle(featured)}><p className="text-center text-[14px] font-bold tracking-[.04em] text-[#1d40b0]">{featured.category}</p><h2 className="font-serif text-[34px] sm:text-[46px] leading-[1.08] font-bold tracking-[-1.35px] text-center mt-3 group-hover:text-[#1d40b0]">{featured.title}</h2><p className="text-center text-[14px] text-slate-600 mt-5 mb-6">BY <b className="text-slate-800">{featured.author}</b> · {featured.readTime}</p><ImageArt article={featured}/><p className="text-center text-sm leading-6 text-slate-500 mt-5 max-w-xl mx-auto">{featured.subtitle}</p><div className="text-center mt-5 text-[12px] font-extrabold tracking-[.08em] text-[#1d40b0]">READ THE STORY <ArrowRight size={14} className="inline ml-1"/></div></article>
         <aside className="order-3 space-y-[30px]">{side.map((a,i)=><button key={a.id} onClick={()=>openArticle(a)} className="text-left w-full group"><ImageArt article={a} variant={i+1}/><p className="text-[14px] font-bold tracking-[.035em] text-[#1d40b0] mt-4">{a.category}</p><h3 className="font-serif font-bold text-[19px] leading-[1.18] tracking-[-.25px] mt-2 group-hover:text-[#1d40b0]">{a.title}</h3><div className="mt-5 border-b border-[#dce1e9]"/></button>)}</aside>
