@@ -13,8 +13,14 @@
   <body>
     <script>
       (function () {
-        var match = window.location.hash.match(/^#\/article\/([^/?#]+)/);
-        if (match) window.history.replaceState(null, "", "/article/" + match[1]);
+        function removeLegacyArticleHash() {
+          var match = window.location.hash.match(/^#\/article\/([^/?#]+)/);
+          if (match) {
+            window.history.replaceState(null, "", "/article/" + match[1]);
+          }
+        }
+        removeLegacyArticleHash();
+        window.addEventListener("hashchange", removeLegacyArticleHash);
       })();
     </script>
     <div id="root"></div>
