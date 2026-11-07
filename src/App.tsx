@@ -58,7 +58,7 @@ function App() {
   const [saved, setSaved] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
   const visible = useMemo(()=>articles.filter(a=>(category==='Latest'||a.navGroup===category)&&(!query||[a.title,a.subtitle,a.category,a.author].join(' ').toLowerCase().includes(query.toLowerCase()))),[articles,category,query]);
-  const featured = articles.find(a=>a.placement==='featured') || ARTICLES[0];
+  const featured = articles.find(a=>a.placement==='featured') || articles[0];
   const latest = articles.filter(a=>a.placement==='latest');
   const side = articles.filter(a=>a.placement==='side');
   useEffect(() => {
