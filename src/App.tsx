@@ -7,8 +7,8 @@ type Nav = typeof nav[number] | 'Latest';
 
 function Brand({ inverse = false }: { inverse?: boolean }) {
   return <a href="/" onClick={e=>{e.preventDefault();window.location.hash='';window.location.reload();}} className="flex items-center gap-2.5 shrink-0" aria-label="Entrepreneur home">
-    <span className="grid grid-cols-3 gap-[2px] w-7 h-7">{Array.from({length:9},(_,i)=><i key={i} className="bg-[#1d40b0] rounded-[1px]"/>)}</span>
-    <span className={`font-serif text-[27px] sm:text-[30px] font-bold tracking-[-1.2px] ${inverse?'text-white':'text-[#111]'}`}>Entrepreneur<span className="text-[10px] align-super ml-0.5">®</span></span>
+    <span className="grid grid-cols-3 gap-[3px] w-9 h-9 sm:w-10 sm:h-10">{Array.from({length:9},(_,i)=><i key={i} className="bg-[#1d40b0] rounded-[1px]"/>)}</span>
+    <span className={`font-serif text-[35px] sm:text-[43px] font-bold tracking-[-1.8px] ${inverse?'text-white':'text-[#111]'}`}>Entrepreneur<span className="text-[10px] align-super ml-0.5">®</span></span>
   </a>;
 }
 
